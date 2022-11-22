@@ -2,7 +2,7 @@ from typing import List
 import pandas as pd
 from constants import Constants
 
-class Table:
+class DataManger:
 
     def __init__(self, headers: List):
         """
