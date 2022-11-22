@@ -1,7 +1,11 @@
 class HtmlParser:
 
+    
     def __init__(self, link: str):
-        pass
+        """
+        Initialize a new html file.
+        """
+        self.html = link
 
     def set_new_page(self, link: str) -> None:
         pass
