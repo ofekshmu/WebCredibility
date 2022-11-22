@@ -2,3 +2,5 @@ venv
 __pycache__
 .vscode
 Cached Pages
+*.html
+log.txt

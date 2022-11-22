@@ -24,9 +24,9 @@ class DataManger:
         self.table.to_excel(f"output/{Constants.OUTPUT_FILE_NAME}", index=False)
     
     @staticmethod
-    def read_table(self, path: str) -> List:
+    def read_table(path: str) -> List:
         """
         A static function to read an excel file into a data frame.
         """
-        pass
+        return pd.read_excel(Constants.DATA_PATH)
 
