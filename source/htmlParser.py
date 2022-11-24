@@ -28,12 +28,16 @@ class HtmlParser:
         pass
 
     @staticmethod
-    def find_html(url: str) -> Union[str, None]:
+    def find_cached_html(url: str) -> Union[str, None]:
         """
         Look for the html with the specified url in the Cached pages folder,
         return the ralative path of the file if found, else, return None.
         """
-        pass
+        folder_names = [] # TODO
+        for name in folder_names:
+            if url.find(name) != -1:
+                # if has a single html file -> return path to it.
+                # if has more folders, repeat process again.
 
     @staticmethod
     def create_html(url: str, idx: int) -> bool:
