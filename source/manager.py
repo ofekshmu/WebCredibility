@@ -1,7 +1,6 @@
-from urllib.request import urlopen
-from urllib.error import HTTPError
 from dataManager import DataManger
 from constants import Constants
+from htmlParser import HtmlParser
 
 def log(msg: str):
     print(msg)
@@ -21,18 +20,8 @@ class Manager:
         url_lst = table["URL"]
         for idx, url in enumerate(url_lst, start=2):
             print(f"Current progress: {idx-1}/{total}")
-            # Download from URL and decode as UTF-8 text.
-            try:
-                with urlopen(url) as webpage:
-                    content = webpage.read().decode("utf8")
-            except HTTPError as e:
-                log(f"File with URL {url} and index {idx} has resulted in error: {e}")
+            if HtmlParser.find_html(url):
                 continue
-
-            # # Save to file.
-            with open( f"data\Created HTML\{idx}.html", 'w', encoding="utf-8", errors='ignore') as output:
-                output.write(content)
-
-
-
+            if HtmlParser.create_html(url, idx):
+                continue
 
