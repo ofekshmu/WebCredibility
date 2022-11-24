@@ -2,6 +2,10 @@ from typing import Union
 from constants import log
 from urllib.request import urlopen
 from urllib.error import HTTPError
+from constants import Constants
+import shutil
+
+import os
 
 class HtmlParser:
 
@@ -28,16 +32,30 @@ class HtmlParser:
         pass
 
     @staticmethod
-    def find_cached_html(url: str) -> Union[str, None]:
+    def find_cached_html(url: str, idx: int) -> bool:
         """
-        Look for the html with the specified url in the Cached pages folder,
-        return the ralative path of the file if found, else, return None.
+        Look for the html with the specified url in the Cached pages folder.
+        If found, copy to specified directory and return True, else return False.
         """
-        folder_names = [] # TODO
-        for name in folder_names:
-            if url.find(name) != -1:
-                # if has a single html file -> return path to it.
-                # if has more folders, repeat process again.
+        def find_file(path: str, url: str) -> str:
+            if os.path.isfile(path):
+                return path
+
+            folder_names = [] # Get all folder names in path
+            for name in folder_names:
+                if url.find(name) != -1:
+                    return find_file(path + name, url)
+            
+            return None
+
+
+        path = find_file(Constants.CACHED_DATA_PATH, url)
+        if path is not None:
+            original = path
+            target = "data/Created HTML/{idx}_Cached.html"
+            shutil.copyfile(original, target)
+            return True
+        return False
 
     @staticmethod
     def create_html(url: str, idx: int) -> bool:
@@ -50,12 +68,14 @@ class HtmlParser:
                 content = webpage.read().decode("utf8")
 
             # Save to file.
-            with open( f"data\Created HTML\{idx}.html", 'w', encoding="utf-8", errors='ignore') as output:
+            with open( f"data\Created HTML\{idx}_Created.html", 'w', encoding="utf-8", errors='ignore') as output:
                 output.write(content)
             log(f"{idx} Success: Created file {idx}.html for url: {url}")
             return True
 
         except HTTPError as e:
             log(f"{idx} FAILED: Received an HTTPError for {idx} -> {url}")
+        except Exception as e:
+            log("Got some other error...")
             
         return False
