@@ -5,6 +5,9 @@ class Constants:
     HEADERS = ["ID", "Link", "Result rank", "Likert raiting"]
     CACHED_DATA_PATH = "data/Cached Pages"
 
+    # Flags
+    CREATE_HTML_ON = False
+
 
 def log(msg: str):
     print(msg)

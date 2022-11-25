@@ -4,32 +4,67 @@ from urllib.request import urlopen
 from urllib.error import HTTPError
 from constants import Constants
 import shutil
+from bs4 import BeautifulSoup
 
 import os
 
 class HtmlParser:
 
     
-    def __init__(self, link: str):
+    def __init__(self, file_name: str):
         """
         Initialize a new html file.
         """
-        self.html = link
+        f = open(f"data\Created HTML\{file_name}", 'r')
+        self.soup = BeautifulSoup(f.read(), 'html.parser')
 
-    def set_new_page(self, link: str) -> None:
-        pass
+
+    def set_new_page(self, file_name: str) -> None:
+        """
+        TODO
+        """
+        f = open(f"data\Created HTML\{file_name}", 'r')
+        self.soup = BeautifulSoup(f.read(), 'html.parser')
 
     def get_word_count(self) -> int:
         pass
 
     def get_mispelling_count(self) -> int:
-        pass
+        from textblob import Word
+
+        def check_spelling(word):
+            
+            word = Word(word)
+            result = word.spellcheck()
+            
+            if word == result[0][0]:
+                return True
+            return False
+
+        text = self.soup.get_text()
+        word_lst = text.replace('\n', ' ').replace(', ', ' ').split()
+
+        count = 0
+        print(len(word_lst))
+        for element in word_lst:
+            if check_spelling(element):
+                count += 1
+        print(len(word_lst))
+        print(count)
+        return count
+        
 
     def get_banner_count(self) -> int:
         pass
 
-    def get_ref_count(self) -> int:
-        pass
+    def get_link_count(self) -> int:
+        """
+        Returns the total number of links and a elements in the selected html file.
+        """
+        link_count = len(self.soup.find_all('link'))
+        a_count =   len(self.soup.find_all('a'))
+        return link_count + a_count
+
 
     @staticmethod
     def find_cached_html(url: str, idx: int) -> bool:
