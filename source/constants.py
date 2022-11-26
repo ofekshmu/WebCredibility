@@ -2,8 +2,9 @@
 class Constants:
     DATA_PATH = "data/web_credibility_1000_url_ratings.xls"
     OUTPUT_FILE_NAME = "result"
-    HEADERS = ["original_row_ID", "URL", "Result rank", "embedded links", "misspelled words", "Likert raiting"]
+    HEADERS = ["original_row_ID", "URL", "Result Rank", "embedded links", "Misspelled words", "Likert Raiting"]
     CACHED_DATA_PATH = "data/Cached Pages"
+    CREATED_DATA_PATH = "data/Created HTML"
 
     # Flags
     CREATE_HTML_ON = False

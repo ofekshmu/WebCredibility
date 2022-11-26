@@ -23,7 +23,7 @@ class HtmlParser:
         """
         TODO
         """
-        f = open(f"data\Created HTML\{file_name}", 'r')
+        f = open(f"data\Created HTML\{file_name}", 'r', encoding="utf8")
         self.soup = BeautifulSoup(f.read(), 'html.parser')
 
     def get_word_count(self) -> int:

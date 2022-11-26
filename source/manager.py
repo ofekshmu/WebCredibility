@@ -2,11 +2,14 @@ from dataManager import DataManger
 from constants import Constants
 from htmlParser import HtmlParser
 from constants import log
+from os import listdir
 
 class Manager:
 
     def __init__(self):
-        # self.parser = HtmlParser()
+        file_name = "961_Created.html"
+
+        self.parser = HtmlParser(file_name)
         self.dataManager = DataManger(Constants.HEADERS)
         
 
@@ -26,14 +29,26 @@ class Manager:
             log(f"Skipping HTML creation")
 
     def start_parsing(self) -> None:
-        file_name = "961_Created.html"
-        row_id = int(file_name.split("_")[0])
-        given_table = DataManger.read_table(Constants.DATA_PATH)
-        row = given_table.iloc[row_id]
-        print(row)
-        self.dataManager.add_row(row)
+        name_lst = listdir(Constants.CREATED_DATA_PATH)
+        length = len(name_lst)
+        given_table = self.dataManager.read_table()
+        offset = 2
+        for idx, file_name in enumerate(name_lst, start=1):
+            log(f"Adding new data to result.csv {idx}/{length} ")
+            self.parser.set_new_page(file_name)
+            row_id = int(file_name.split("_")[0])
+
+            x = given_table.iloc[row_id - offset]
+            values = [row_id,
+                    x["URL"],
+                    x["Result Rank"],
+                    self.parser.get_link_count(),
+                    "X",
+                    x["Likert Rating"]]
+            row = dict(zip(Constants.HEADERS, values))
+            self.dataManager.add_row(row)
         self.dataManager.export_table()
-        html_parser = HtmlParser(file_name)
-        row = []
-        row.append(html_parser.get_link_count())
-        row.append(html_parser.get_mispelling_count())
+
+
+
+    
