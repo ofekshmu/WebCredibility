@@ -8,6 +8,7 @@ class Manager:
     def __init__(self):
         # self.parser = HtmlParser()
         self.dataManager = DataManger(Constants.HEADERS)
+        
 
     def create_HTML_files(self) -> None:
         if Constants.CREATE_HTML_ON:
@@ -25,6 +26,14 @@ class Manager:
             log(f"Skipping HTML creation")
 
     def start_parsing(self) -> None:
-        html_parser = HtmlParser("961_Created.html")
-        link_count = html_parser.get_link_count()
-        mis_word_count = html_parser.get_mispelling_count()
+        file_name = "961_Created.html"
+        row_id = int(file_name.split("_")[0])
+        given_table = DataManger.read_table(Constants.DATA_PATH)
+        row = given_table.iloc[row_id]
+        print(row)
+        self.dataManager.add_row(row)
+        self.dataManager.export_table()
+        html_parser = HtmlParser(file_name)
+        row = []
+        row.append(html_parser.get_link_count())
+        row.append(html_parser.get_mispelling_count())

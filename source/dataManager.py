@@ -9,19 +9,22 @@ class DataManger:
         Create a pandas data frame with headers as its first row 
         """
         self.table = pd.DataFrame(columns=headers)
+        print(self.table)
 
-    def add_row(self) -> None:
+
+    def add_row(self, row) -> None:
         """
         Add a single row into the active table
         """
-        pass
+        self.table = pd.concat([self.table, row])
 
     def export_table(self) -> None:
         """
         Export the data frame located in self.table as an excel file to
         the output directory.
         """
-        self.table.to_excel(f"output/{Constants.OUTPUT_FILE_NAME}", index=False)
+        print(self.table)
+        self.table.to_excel(f"output/{Constants.OUTPUT_FILE_NAME}.xlsx", index=False)
     
     @staticmethod
     def read_table(path: str) -> List:
