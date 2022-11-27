@@ -114,3 +114,7 @@ class HtmlParser:
             log("Got some other error...")
             
         return False
+
+    @staticmethod
+    def find_cached_html(self) -> bool:
+        pass

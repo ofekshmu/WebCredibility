@@ -5,6 +5,8 @@ class Constants:
     HEADERS = ["original_row_ID", "URL", "Result Rank", "embedded links", "Misspelled words", "Likert Raiting"]
     CACHED_DATA_PATH = "data/Cached Pages"
     CREATED_DATA_PATH = "data/Created HTML"
+    HTML_LOG = "data/Cached Pages/hts-cache/new.txt"
+    KEY_WORD = "PagesForAllUrls"
 
     # Flags
     CREATE_HTML_ON = False
