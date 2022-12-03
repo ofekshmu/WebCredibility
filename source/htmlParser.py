@@ -1,23 +1,19 @@
-from typing import Union
 from constants import log
 from urllib.request import urlopen
 from urllib.error import HTTPError
 from constants import Constants
-import shutil
 from bs4 import BeautifulSoup
-
 import os
+
 
 class HtmlParser:
 
-    
     def __init__(self, file_name: str):
         """
         Initialize a new html file.
         """
         f = open(f"data\Created HTML\{file_name}", 'r')
         self.soup = BeautifulSoup(f.read(), 'html.parser')
-
 
     def set_new_page(self, file_name: str) -> None:
         """
@@ -53,7 +49,6 @@ class HtmlParser:
         print(count)
         return count
         
-
     def get_banner_count(self) -> int:
         pass
 
@@ -65,32 +60,6 @@ class HtmlParser:
         a_count =   len(self.soup.find_all('a'))
         return link_count + a_count
 
-
-    @staticmethod
-    def find_cached_html(url: str, idx: int) -> bool:
-        """
-        Look for the html with the specified url in the Cached pages folder.
-        If found, copy to specified directory and return True, else return False.
-        """
-        def find_file(path: str, url: str) -> str:
-            if os.path.isfile(path):
-                return path
-
-            folder_names = [] # Get all folder names in path
-            for name in folder_names:
-                if url.find(name) != -1:
-                    return find_file(path + name, url)
-            
-            return None
-
-
-        path = find_file(Constants.CACHED_DATA_PATH, url)
-        if path is not None:
-            original = path
-            target = "data/Created HTML/{idx}_Cached.html"
-            shutil.copyfile(original, target)
-            return True
-        return False
 
     @staticmethod
     def create_html(url: str, idx: int) -> bool:
@@ -116,5 +85,22 @@ class HtmlParser:
         return False
 
     @staticmethod
-    def find_cached_html(self) -> bool:
-        pass
+    def extract_logs() -> bool:
+        dict = {}
+        file = open(Constants.HTML_LOG, 'r', encoding="windows-1252")
+        for idx, line in enumerate(file):
+            if idx == 0:
+                continue
+            print(f"Identifying locations {idx}/1662", end="")
+            lst = line.split("\t")
+            url = lst[-3]
+            full_path = lst[-2]
+            try:
+                index = full_path.index("PagesForAllUrls") + len("PagesForAllUrls") + 1
+            except:
+                print(f" X - Bad path")
+                continue
+            relative_path = full_path[index:]
+            dict[url] = [relative_path]
+            print(f" V - Inserted")
+        return dict

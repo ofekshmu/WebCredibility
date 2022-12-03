@@ -9,7 +9,7 @@ class Constants:
     KEY_WORD = "PagesForAllUrls"
 
     # Flags
-    CREATE_HTML_ON = False
+    CREATE_HTML_ON = True
 
 
 def log(msg: str):

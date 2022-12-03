@@ -2,6 +2,7 @@ from typing import List
 import pandas as pd
 from constants import Constants
 
+
 class DataManger:
 
     def __init__(self, headers: List):
@@ -10,8 +11,7 @@ class DataManger:
         """
         self.headers = headers
         self.table = pd.DataFrame(columns=headers)
-        self.original_table = pd.read_excel(Constants.DATA_PATH)
-
+        #self.original_table = pd.read_excel(Constants.DATA_PATH)
 
     def add_row(self, row) -> None:
         """
@@ -27,9 +27,10 @@ class DataManger:
         print(self.table)
         self.table.to_excel(f"output/{Constants.OUTPUT_FILE_NAME}.xlsx", index=False)
     
-    def read_table(self) -> List:
+    @staticmethod
+    def read_table() -> List:
         """
         A function that returns the original excel table
         """
-        return self.original_table
+        return pd.read_excel(Constants.DATA_PATH)
 
