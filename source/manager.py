@@ -27,7 +27,8 @@ class Manager:
 
                 if url in dict.keys():
                     # idx idicate row number in the Constants.DATA_PATH
-                    dict[url] = dict[url].append(idx)
+                    temp = dict[url]
+                    dict[url] = temp.append(idx)
                     log(f"Found url in cached folder")
                     continue
 
