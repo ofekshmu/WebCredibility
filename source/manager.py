@@ -13,30 +13,36 @@ class Manager:
         self.parser = HtmlParser(file_name)
         self.dataManager = DataManger(Constants.HEADERS)
 
-    def create_HTML_files(self) -> None:
-        if Constants.CREATE_HTML_ON:
-            log("Creating Html files...")
-            table = DataManger.read_table()
-            total = len(table)
-            url_lst = table["URL"]
+    def search_and_write(self) -> None:
+        """
+        The function will identify the location of each file with the url specified in the xlsx file.
+        The relative path found will be written to XXX.txt.
+        if path was not found, function will try and create it by downloading the information.
+        """
+        
+        log("Extracting information from given log file...")
+        dict = HtmlParser.extract_logs()
+        log("Looking for existing HTML files...")
+        table = DataManger.read_table()
+        total = len(table)
+        url_lst = table["URL"]
 
-            dict = HtmlParser.extract_logs()
 
-            for idx, url in enumerate(url_lst, start=2):
-                print(f"Current progress: {idx-1}/{total}")
+        for idx, url in enumerate(url_lst, start=2):
+            print(f"Current progress: {idx-1}/{total}")
 
-                if url in dict.keys():
-                    # idx idicate row number in the Constants.DATA_PATH
-                    temp = dict[url]
-                    dict[url] = temp.append(idx)
-                    log(f"Found url in cached folder")
-                    continue
+            if url in dict.keys():
+                # idx idicate row number in the Constants.DATA_PATH
+                temp = dict[url]
+                dict[url] = temp.append(idx)
+                log(f"Found url in cached folder")
+                continue
 
-                if HtmlParser.create_html(url, idx):
-                    # add page link to dictionary?
-                    continue
-        else:
-            log(f"Skipping HTML creation")
+            if HtmlParser.create_html(url, idx):
+                # add page link to dictionary?
+                continue
+            
+        return self
 
     def start_parsing(self) -> None:
         name_lst = listdir(Constants.CREATED_DATA_PATH)

@@ -86,20 +86,28 @@ class HtmlParser:
 
     @staticmethod
     def extract_logs() -> bool:
+        """
+        Extract the path location of all files with urls correpsonding to the given excel.
+        return a dictionary with url as keys and relative path as a value.
+        """
         dict = {}
         file = open(Constants.HTML_LOG, 'r', encoding="windows-1252")
+        remote_folder = "PagesForAllUrls/"
         for idx, line in enumerate(file):
-            if idx == 0:
+            if idx == 0: # First row of the files is the header row - skip it
                 continue
+            # file has a total of 1663 lines
             print(f"Identifying locations {idx}/1662", end="")
             lst = line.split("\t")
             url = lst[-3]
             full_path = lst[-2]
             try:
-                index = full_path.index("PagesForAllUrls") + len("PagesForAllUrls") + 1
+                index = full_path.index(remote_folder) + len(remote_folder) 
             except:
+                # Not all url have a location directory, we will skip those if the index function returns an error.
                 print(f" X - Bad path")
                 continue
+            # Extract the relative path out of hte full path
             relative_path = full_path[index:]
             dict[url] = [relative_path]
             print(f" V - Inserted")
