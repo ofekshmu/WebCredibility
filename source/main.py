@@ -6,8 +6,7 @@ from datetime import datetime
 def main():
     log(f"{50*'~'}\nStarting Run...\n Date is {datetime.now()}\n{50*'~'}")
     myManager = Manager()
-    # m.establish_path()
-    # m.start_parsing()
+    myManager.parse_and_export()
 
 
 if __name__ == "__main__":

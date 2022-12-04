@@ -8,19 +8,25 @@ from typing import Union
 
 class HtmlParser:
 
-    def __init__(self, file_name: str):
+    def __init__(self, path: str = None):
         """
         Initialize a new html file.
         """
-        f = open(f"data\Created HTML\{file_name}", 'r')
-        self.soup = BeautifulSoup(f.read(), 'html.parser')
+        if path is not None:
+            f = open(path, 'r')
+            self.soup = BeautifulSoup(f.read(), 'html.parser')
 
-    def set_new_page(self, file_name: str) -> None:
+    def set_new_page(self, path: str) -> bool:
         """
         TODO
         """
-        f = open(f"data\Created HTML\{file_name}", 'r', encoding="utf8")
-        self.soup = BeautifulSoup(f.read(), 'html.parser')
+        try:
+            f = open(f"data\{path}", 'r', encoding="utf8")
+            self.soup = BeautifulSoup(f.read(), 'html.parser')
+            return True
+        except:
+            log(f"File Does Not exist is the specified location!")
+            return False
 
     def get_word_count(self) -> int:
         pass
@@ -76,7 +82,7 @@ class HtmlParser:
             with open(path, 'w', encoding="utf-8", errors='ignore') as output:
                 output.write(content)
             log(f"{idx} Success: Created file {idx}.html for url: {url}")
-            return path
+            return path.replace('/', '\\')
 
         except HTTPError as e:
             log(f"{idx} FAILED: Received an HTTPError for {idx} -> {url}")
@@ -102,7 +108,7 @@ class HtmlParser:
             if idx % int(1662*0.05) == 0:
                 # print progress
                 # file has a total of 1663 lines
-                print(f"Identifying locations {idx // int(1662*0.05)}%")
+                print(f"> > > > > > > > > > > > > > > > > Identifying locations {idx*100 // 1662}%")
 
             lst = line.split("\t")
             url = lst[-3]
@@ -111,10 +117,9 @@ class HtmlParser:
                 index = full_path.index(remote_folder) + len(remote_folder) 
             except:
                 # Not all url have a location directory, we will skip those if the index function returns an error.
-                print(f" X - Bad path")
+                print(f"line no' {idx}: Bad path in line {idx}")
                 continue
             # Extract the relative path out of hte full path
-            relative_path = full_path[index:]
-            dict[url] = relative_path
-            print(f" V - Inserted")
+            relative_path = f"Cached Pages\{full_path[index:]}"
+            dict[url] = relative_path.replace('/', '\\')
         return dict
