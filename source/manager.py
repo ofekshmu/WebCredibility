@@ -54,6 +54,12 @@ class Manager:
             json.dump(dict, outfile)
 
     def start_parsing(self) -> None:
+        table = DataManger.read_table()
+        total = len(table)
+        url_lst = table["URL"]
+
+        for idx, url in enumerate(url_lst, start=2):
+            if url in #....TODO
         name_lst = listdir(Constants.CREATED_DATA_PATH)
         length = len(name_lst)
         given_table = self.dataManager.read_table()
