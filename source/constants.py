@@ -7,6 +7,7 @@ class Constants:
     CREATED_DATA_PATH = "data/Created HTML"
     HTML_LOG = "data/Cached Pages/hts-cache/new.txt"
     KEY_WORD = "PagesForAllUrls"
+    PATH_CONFIG = "path_config.json"
 
     # Flags
     CREATE_HTML_ON = True

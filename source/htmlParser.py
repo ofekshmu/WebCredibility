@@ -3,7 +3,7 @@ from urllib.request import urlopen
 from urllib.error import HTTPError
 from constants import Constants
 from bs4 import BeautifulSoup
-import os
+from typing import Union
 
 
 class HtmlParser:
@@ -62,27 +62,28 @@ class HtmlParser:
 
 
     @staticmethod
-    def create_html(url: str, idx: int) -> bool:
+    def create_html(url: str, idx: int) -> Union[str, None]:
         """
         Try loading the Html file and downloading its content.
-        returns True uppon successful downdload and false otherwise.
+        returns the new location or None if operation failed
         """
         try:
             with urlopen(url) as webpage:
                 content = webpage.read().decode("utf8")
 
             # Save to file.
-            with open( f"data\Created HTML\{idx}_Created.html", 'w', encoding="utf-8", errors='ignore') as output:
+            path = f"data\Created HTML\{idx}_Created.html"
+            with open(path, 'w', encoding="utf-8", errors='ignore') as output:
                 output.write(content)
             log(f"{idx} Success: Created file {idx}.html for url: {url}")
-            return True
+            return path
 
         except HTTPError as e:
             log(f"{idx} FAILED: Received an HTTPError for {idx} -> {url}")
         except Exception as e:
             log("Got some other error...")
             
-        return False
+        return None
 
     @staticmethod
     def extract_logs() -> bool:
@@ -94,10 +95,15 @@ class HtmlParser:
         file = open(Constants.HTML_LOG, 'r', encoding="windows-1252")
         remote_folder = "PagesForAllUrls/"
         for idx, line in enumerate(file):
-            if idx == 0: # First row of the files is the header row - skip it
+            # First row of the files is the header row - skip it
+            if idx == 0:
                 continue
-            # file has a total of 1663 lines
-            print(f"Identifying locations {idx}/1662", end="")
+
+            if idx % int(1662*0.05) == 0:
+                # print progress
+                # file has a total of 1663 lines
+                print(f"Identifying locations {idx // int(1662*0.05)}%")
+
             lst = line.split("\t")
             url = lst[-3]
             full_path = lst[-2]
@@ -109,6 +115,6 @@ class HtmlParser:
                 continue
             # Extract the relative path out of hte full path
             relative_path = full_path[index:]
-            dict[url] = [relative_path]
+            dict[url] = relative_path
             print(f" V - Inserted")
         return dict
