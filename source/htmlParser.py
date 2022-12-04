@@ -13,6 +13,7 @@ class HtmlParser:
         Initialize a new html file.
         """
         if path is not None:
+            self.path = path
             f = open(path, 'r')
             self.soup = BeautifulSoup(f.read(), 'html.parser')
 
@@ -21,24 +22,40 @@ class HtmlParser:
         TODO
         """
         try:
+            self.path = path
             f = open(f"data\{path}", 'r', encoding="utf8")
             self.soup = BeautifulSoup(f.read(), 'html.parser')
             return True
-        except:
-            log(f"File Does Not exist is the specified location!")
+        except Exception:
+            # log(f"File Does Not exist is the specified location!")
             return False
 
     def get_word_count(self) -> int:
-        pass
+        text = self.soup.get_text()
+        word_lst = text.replace('\n', ' ').replace(', ', ' ').split()
+        return len(word_lst)
+
+    def get_char_count(self) -> int:
+        return len(self.soup.get_text())
+
+    def get_img_count(self) -> int:
+        return len(self.soup.find_all('img'))
+
+    def is_url_contained_key_word(self) -> int:
+        lst = [".org.", ".wiki.", ".gov.", ".ac."]
+        for word in lst:
+            if word in self.path:
+                return True
+        return False
 
     def get_mispelling_count(self) -> int:
         from textblob import Word
 
         def check_spelling(word):
-            
+
             word = Word(word)
             result = word.spellcheck()
-            
+
             if word == result[0][0]:
                 return True
             return False
@@ -54,7 +71,7 @@ class HtmlParser:
         print(len(word_lst))
         print(count)
         return count
-        
+
     def get_banner_count(self) -> int:
         pass
 
@@ -63,10 +80,10 @@ class HtmlParser:
         Returns the total number of links and a elements in the selected html file.
         """
         link_count = len(self.soup.find_all('link'))
-        a_count =   len(self.soup.find_all('a'))
+        a_count = len(self.soup.find_all('a'))
         return link_count + a_count
 
-
+    # TODO make sure if this function corresponds with the stats of the provided html
     @staticmethod
     def create_html(url: str, idx: int) -> Union[str, None]:
         """

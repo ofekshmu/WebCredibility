@@ -1,8 +1,12 @@
 
 class Constants:
+    # Path to Excel holding url basic info and prediction
     DATA_PATH = "data/web_credibility_1000_url_ratings.xls"
+    # Name of the output file (path and ending specified in code)
     OUTPUT_FILE_NAME = "result"
-    HEADERS = ["original_row_ID", "URL", "Result Rank", "embedded links", "Misspelled words", "Likert Raiting"]
+    # Headers for final, exported excel chart
+    HEADERS = ["Original row ID", "URL", "Result Rank", "Embedded links", "Misspelled words", "Word count", "Contains key words", "Char count", "Img count", "Likert Raiting"]
+    # Folder containing given a u 
     CACHED_DATA_PATH = "data/Cached Pages"
     CREATED_DATA_PATH = "data/Created HTML"
     HTML_LOG = "data/Cached Pages/hts-cache/new.txt"

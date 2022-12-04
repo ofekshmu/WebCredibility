@@ -3,7 +3,6 @@ from constants import Constants
 from htmlParser import HtmlParser
 from constants import log
 import json
-from os import listdir
 
 
 class Manager:
@@ -16,7 +15,7 @@ class Manager:
         try:
             json_file = open(Constants.PATH_CONFIG, "r")
             log("Found path_config file!")
-        except:
+        except Exception:  # In case path_config does not exist
             log("path_config file not found, creating...")
             self.__search_and_write()
             json_file = open(Constants.PATH_CONFIG, "r")
@@ -24,7 +23,7 @@ class Manager:
 
     def __search_and_write(self) -> None:
         """
-        The function creates
+        The function creates a json file indicating the relation between the url and its relative directory.
         The function will identify the location of each file with the url specified in the xlsx file.
         The relative path found will be written to XXX.txt.
         if path was not found, function will try and create it by downloading the information.
@@ -58,6 +57,7 @@ class Manager:
         for idx, url in enumerate(url_lst, start=1):
             if idx % (length*0.01) == 0:
                 log(f"Progress: {idx * 100//length}%")
+            
             if url in self.paths.keys():
                 path = self.paths[url]
                 if not self.parser.set_new_page(path):
@@ -69,6 +69,10 @@ class Manager:
                           x["Result Rank"],
                           self.parser.get_link_count(),
                           "X",
+                          self.parser.get_word_count(),
+                          self.parser.is_url_contained_key_word(),
+                          self.parser.get_char_count(),
+                          self.parser.get_img_count(),
                           x["Likert Rating"]]
                 row = dict(zip(Constants.HEADERS, values))
                 self.dataManager.add_row(row)
