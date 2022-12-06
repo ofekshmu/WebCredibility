@@ -4,6 +4,7 @@ from urllib.error import HTTPError
 from constants import Constants
 from bs4 import BeautifulSoup
 from typing import Union
+from tqdm import tqdm
 
 
 class HtmlParser:
@@ -14,8 +15,8 @@ class HtmlParser:
         """
         if path is not None:
             self.path = path
-            f = open(path, 'r')
-            self.soup = BeautifulSoup(f.read(), 'html.parser')
+            with open(path, 'r') as file:
+                self.soup = BeautifulSoup(file, 'html.parser')
 
     def set_new_page(self, path: str) -> bool:
         """
@@ -123,7 +124,8 @@ class HtmlParser:
         dict = {}
         file = open(Constants.HTML_LOG, 'r', encoding="windows-1252")
         remote_folder = "PagesForAllUrls/"
-        for idx, line in enumerate(file):
+        log("Extracting logs...")
+        for idx, line in tqdm(enumerate(file), total=len(file)):
             # First row of the files is the header row - skip it
             if idx == 0:
                 continue

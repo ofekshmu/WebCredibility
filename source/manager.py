@@ -3,6 +3,7 @@ from constants import Constants
 from htmlParser import HtmlParser
 from constants import log
 import json
+from tqdm import tqdm
 
 
 class Manager:
@@ -35,9 +36,7 @@ class Manager:
         total = len(table)
         url_lst = table["URL"]
 
-        for idx, url in enumerate(url_lst, start=2):
-            if (idx - 1) % (total // 0.05) == 0:
-                print(f"Current progress: {(idx-1)*100/total}%")
+        for idx, url in tqdm(enumerate(url_lst, start=2), total=len(url_lst)):
 
             if url not in dict.keys():
                 log(f"URL not found in cached folders, trying to download...")
@@ -57,9 +56,7 @@ class Manager:
         url_lst = table["URL"]
         length = len(url_lst)
         log(f"Adding new data to result.csv...")
-        for idx, url in enumerate(url_lst, start=1):
-            if idx % (length*0.01) == 0:
-                log(f"Progress: {idx * 100//length}%")
+        for idx, url in tqdm(enumerate(url_lst, start=1), total=len(url_lst)):
             
             if url in self.paths.keys():
                 path = self.paths[url]
