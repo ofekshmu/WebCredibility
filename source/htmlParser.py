@@ -42,6 +42,9 @@ class HtmlParser:
         return len(self.soup.find_all('img'))
 
     def is_url_contained_key_word(self) -> int:
+        """
+        TODO: bad functionality
+        """
         lst = [".org.", ".wiki.", ".gov.", ".ac."]
         for word in lst:
             if word in self.path:
@@ -49,6 +52,9 @@ class HtmlParser:
         return False
 
     def get_mispelling_count(self) -> int:
+        """
+        Get the number of misspelled words in the html
+        """
         from textblob import Word
 
         def check_spelling(word):

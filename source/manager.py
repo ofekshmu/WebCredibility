@@ -15,7 +15,7 @@ class Manager:
         try:
             json_file = open(Constants.PATH_CONFIG, "r")
             log("Found path_config file!")
-        except Exception:  # In case path_config does not exist
+        except FileNotFoundError:
             log("path_config file not found, creating...")
             self.__search_and_write()
             json_file = open(Constants.PATH_CONFIG, "r")
@@ -24,9 +24,8 @@ class Manager:
     def __search_and_write(self) -> None:
         """
         The function creates a json file indicating the relation between the url and its relative directory.
-        The function will identify the location of each file with the url specified in the xlsx file.
-        The relative path found will be written to XXX.txt.
-        if path was not found, function will try and create it by downloading the information.
+        if the html file does not exist in the dictionary returned by_extract_logs, the function will try to
+        create the file manualy.
         """
 
         log("Extracting information from given log file...")
@@ -50,6 +49,10 @@ class Manager:
             json.dump(dict, outfile)
 
     def parse_and_export(self) -> None:
+        """
+        The function will iterate over all existing html, parse and create an xlsx
+        file containing the results gathered.
+        """
         table = DataManger.read_table()
         url_lst = table["URL"]
         length = len(url_lst)
