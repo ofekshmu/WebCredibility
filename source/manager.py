@@ -4,6 +4,8 @@ from htmlParser import HtmlParser
 from constants import log
 import json
 from tqdm import tqdm
+import pandas as pd
+from Statistics import SeriesAnalysis
 
 
 class Manager:
@@ -77,3 +79,35 @@ class Manager:
                 row = dict(zip(Constants.HEADERS, values))
                 self.dataManager.add_row(row)
         self.dataManager.export_table()
+
+    def read_excel_and_analyze(self, column_names: list = None) -> None:
+        """
+        Read a table from an Excel file, iterate through its columns, and call the methods from the
+        SeriesAnalysis class on each column.
+
+        Args:
+        filepath (str): The path to the Excel file to read the table from.
+
+        Returns:
+        None
+        """
+        print("Calculating statistics...")
+        df = pd.read_excel(f"output/{Constants.OUTPUT_FILE_NAME}.xlsx")
+
+        with open('statistics.txt', 'a') as f:
+
+            f.write(f'column\t\t\tmean\t\tmedian\t\tstd\t\t\tvar\t\t\tcorrelation\n')
+
+            if column_names is None:
+                column_names = df.columns
+
+            for col in tqdm(column_names):
+                series = df[col]
+
+                SeriesAnalysis.histogram(series, col)
+                SeriesAnalysis.line_plot(series, col)
+                #SeriesAnalysis.scatter_plot(series)
+
+                likert_corr = SeriesAnalysis.correlation(series, df['Likert Raiting'])
+                stats = SeriesAnalysis.statistics(series)
+                f.write(f'{col}\t\t{stats["mean"]}\t\t{stats["median"]}\t\t{stats["std"]}\t\t{stats["var"]}\t\t{likert_corr}\n')

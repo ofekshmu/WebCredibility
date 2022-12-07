@@ -7,3 +7,5 @@ log.txt
 output
 data
 *.json
+*.png
+*.txt

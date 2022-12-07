@@ -8,7 +8,7 @@ class SeriesAnalysis:
     """
 
     @staticmethod
-    def histogram(series: pd.Series) -> None:
+    def histogram(series: pd.Series, name: str) -> None:
         """
         Create an histogram for the given series and save it as an image in the current directory.
 
@@ -22,10 +22,10 @@ class SeriesAnalysis:
         series.plot.hist()
 
         # Save the histogram as an image in the current directory
-        plt.savefig('histogram.png')
+        plt.savefig(f'histogram_{name}.png')
 
     @staticmethod
-    def line_plot(series: pd.Series) -> None:
+    def line_plot(series: pd.Series, name: str) -> None:
         """
         Create a line plot for the given series and save it as an image in the current directory.
 
@@ -39,10 +39,10 @@ class SeriesAnalysis:
         series.plot.line()
 
         # Save the line graph as an image in the current directory
-        plt.savefig('line_plot.png')
+        plt.savefig(f'line_plot_{name}.png')
 
     @staticmethod
-    def scatter_plot(series: pd.Series) -> None:
+    def scatter_plot(series: pd.Series, name: str) -> None:
         """
         Create a scatter plot for the given series and save it as an image in the current directory.
 
@@ -56,7 +56,7 @@ class SeriesAnalysis:
         series.plot.scatter()
 
         # Save the scatter plot as an image in the current directory
-        plt.savefig('scatter_plot.png')
+        plt.savefig(f'scatter_plot_{name}.png')
 
     @staticmethod
     def correlation(series1: pd.Series, series2: pd.Series) -> float:
@@ -70,7 +70,7 @@ class SeriesAnalysis:
         Returns:
           float: The correlation between the two series.
         """
-        return series1.corr(series2)
+        return round(series1.corr(series2), 3)
 
     @staticmethod
     def statistics(series: pd.Series) -> pd.Series:
@@ -85,11 +85,11 @@ class SeriesAnalysis:
           pandas.Series: A `pandas.Series` object containing the calculated statistical values.
         """
         # Calculate the statistical values
-        mean = series.mean()
-        median = series.median()
+        mean = round(series.mean(), 2)
+        median = round(series.median(), 2)
         mode = series.mode()
-        std = series.std()
-        var = series.var()
+        std = round(series.std(), 2)
+        var = round(series.var(), 2)
 
         # Create a pandas.Series object to hold the results
         stats = pd.Series(

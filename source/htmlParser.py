@@ -112,7 +112,7 @@ class HtmlParser:
             log(f"{idx} FAILED: Received an HTTPError for {idx} -> {url}")
         except Exception as e:
             log("Got some other error...")
-            
+
         return None
 
     @staticmethod
@@ -125,7 +125,7 @@ class HtmlParser:
         file = open(Constants.HTML_LOG, 'r', encoding="windows-1252")
         remote_folder = "PagesForAllUrls/"
         log("Extracting logs...")
-        for idx, line in tqdm(enumerate(file), total=len(file)):
+        for idx, line in tqdm(enumerate(file)):
             # First row of the files is the header row - skip it
             if idx == 0:
                 continue
