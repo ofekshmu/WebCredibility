@@ -70,9 +70,9 @@ class Manager:
                           x["URL"],
                           x["Result Rank"],
                           self.parser.get_link_count(),
-                          "X",
                           self.parser.get_word_count(),
-                          self.parser.is_url_contained_key_word(),
+                          self.parser.get_mispelling_count(),
+                          "X",
                           self.parser.get_char_count(),
                           self.parser.get_img_count(),
                           x["Likert Rating"]]
@@ -94,7 +94,7 @@ class Manager:
         print("Calculating statistics...")
         df = pd.read_excel(f"output/{Constants.OUTPUT_FILE_NAME}.xlsx")
 
-        with open('statistics.txt', 'a') as f:
+        with open('output/statistics/statistics.txt', 'w') as f:
 
             f.write(f'column\t\t\tmean\t\tmedian\t\tstd\t\t\tvar\t\t\tcorrelation\n')
 
@@ -105,8 +105,8 @@ class Manager:
                 series = df[col]
 
                 SeriesAnalysis.histogram(series, col)
-                SeriesAnalysis.line_plot(series, col)
-                #SeriesAnalysis.scatter_plot(series)
+                # SeriesAnalysis.line_plot(series, col)
+                SeriesAnalysis.scatter_plot(df['Likert Raiting'], series, col)
 
                 likert_corr = SeriesAnalysis.correlation(series, df['Likert Raiting'])
                 stats = SeriesAnalysis.statistics(series)

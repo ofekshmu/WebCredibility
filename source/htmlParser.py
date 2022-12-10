@@ -13,6 +13,7 @@ class HtmlParser:
         """
         Initialize a new html file.
         """
+        self.word_lst = []
         if path is not None:
             self.path = path
             with open(path, 'r') as file:
@@ -26,15 +27,18 @@ class HtmlParser:
             self.path = path
             f = open(f"data\{path}", 'r', encoding="utf8")
             self.soup = BeautifulSoup(f.read(), 'html.parser')
+            self.word_lst = []
             return True
         except Exception:
             # log(f"File Does Not exist is the specified location!")
             return False
 
     def get_word_count(self) -> int:
+        """ T"""
         text = self.soup.get_text()
         word_lst = text.replace('\n', ' ').replace(', ', ' ').split()
-        return len(word_lst)
+        self.word_lst = [word for word in word_lst if word.isalpha() and len(word) > 1]
+        return len(self.word_lst)
 
     def get_char_count(self) -> int:
         return len(self.soup.get_text())
@@ -54,7 +58,9 @@ class HtmlParser:
 
     def get_mispelling_count(self) -> int:
         """
-        Get the number of misspelled words in the html
+        Get the number of misspelled words in the html.
+        Make sure to call 'get_word_caount' before this function in order
+        to initialize the word list of the html.
         """
         from textblob import Word
 
@@ -67,16 +73,13 @@ class HtmlParser:
                 return True
             return False
 
-        text = self.soup.get_text()
-        word_lst = text.replace('\n', ' ').replace(', ', ' ').split()
+        if self.word_lst == []:
+            raise Exception("self.word_lst is Empty! Please call 'get_Word_count' first!")
 
         count = 0
-        print(len(word_lst))
-        for element in word_lst:
-            if check_spelling(element):
+        for element in self.word_lst:
+            if not check_spelling(element):
                 count += 1
-        print(len(word_lst))
-        print(count)
         return count
 
     def get_banner_count(self) -> int:

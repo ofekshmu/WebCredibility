@@ -18,11 +18,13 @@ class SeriesAnalysis:
         Returns:
           None
         """
+        plt.figure()
         # Plot the histogram
-        series.plot.hist()
+        summary = series.describe()
+        series.plot.hist(range=(summary['min'], summary['max']), bins=30)
 
         # Save the histogram as an image in the current directory
-        plt.savefig(f'histogram_{name}.png')
+        plt.savefig(f'output/statistics/histogram_{name}.png')
 
     @staticmethod
     def line_plot(series: pd.Series, name: str) -> None:
@@ -35,14 +37,15 @@ class SeriesAnalysis:
         Returns:
           None
         """
+        plt.figure()
         # Plot the line graph
         series.plot.line()
 
         # Save the line graph as an image in the current directory
-        plt.savefig(f'line_plot_{name}.png')
+        plt.savefig(f'output/statistics/line_plot_{name}.png')
 
     @staticmethod
-    def scatter_plot(series: pd.Series, name: str) -> None:
+    def scatter_plot(series_x: pd.Series, series_y: pd.Series, name: str) -> None:
         """
         Create a scatter plot for the given series and save it as an image in the current directory.
 
@@ -52,11 +55,14 @@ class SeriesAnalysis:
         Returns:
           None
         """
+        plt.figure()
+        plt.xlabel("Likert Raiting")
+        plt.ylabel(name)
         # Plot the scatter plot
-        series.plot.scatter()
+        plt.scatter(series_x, series_y)
 
         # Save the scatter plot as an image in the current directory
-        plt.savefig(f'scatter_plot_{name}.png')
+        plt.savefig(f'output/statistics/scatter_plot_{name}.png')
 
     @staticmethod
     def correlation(series1: pd.Series, series2: pd.Series) -> float:

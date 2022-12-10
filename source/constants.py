@@ -5,7 +5,7 @@ class Constants:
     # Name of the output file (path and ending specified in code)
     OUTPUT_FILE_NAME = "result"
     # Headers for final, exported excel chart
-    HEADERS = ["Original row ID", "URL", "Result Rank", "Embedded links", "Misspelled words", "Word count", "Contains key words", "Char count", "Img count", "Likert Raiting"]
+    HEADERS = ["Original row ID", "URL", "Result Rank", "Embedded links", "Word count", "Misspelled words",  "Contains key words", "Char count", "Img count", "Likert Raiting"]
     CACHED_DATA_PATH = "data/Cached Pages"
     CREATED_DATA_PATH = "data/Created HTML"
     HTML_LOG = "data/Cached Pages/hts-cache/new.txt"
