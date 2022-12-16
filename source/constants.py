@@ -24,6 +24,8 @@ class Constants:
 
     # Flags
     CREATE_HTML_ON = True
+    MEMOIZATION = True
+    MEMO_PATH = "Misspelled_data.json"
 
 
 def log(msg: str):

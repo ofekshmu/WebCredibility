@@ -5,6 +5,7 @@ from constants import Constants
 from bs4 import BeautifulSoup
 from typing import Union
 from tqdm import tqdm
+import json
 
 
 class HtmlParser:
@@ -19,6 +20,16 @@ class HtmlParser:
             with open(path, 'r') as file:
                 self.soup = BeautifulSoup(file, 'html.parser')
 
+        if Constants.MEMOIZATION:
+            try:
+                self.memo = json.load(open(Constants.MEMO_PATH, "r"))
+                log("Found an existing Memo.")
+            except Exception:
+                log("No Existing Memo... Creating new...")
+                f = open(Constants.MEMO_PATH, "w")
+                json.dump({}, f)
+                self.memo = {}
+                
     def set_new_page(self, path: str) -> bool:
         """
         TODO
@@ -52,6 +63,10 @@ class HtmlParser:
         Make sure to call 'get_word_caount' before this function in order
         to initialize the word list of the html.
         """
+        if self.path in self.memo:
+            return self.memo[self.path]
+
+
         from textblob import Word
 
         def check_spelling(word):
@@ -70,6 +85,10 @@ class HtmlParser:
         for element in self.word_lst:
             if not check_spelling(element):
                 count += 1
+
+        self.memo[self.path] = count
+        with open(Constants.MEMO_PATH, 'w') as json_file:
+            json.dump(self.memo, json_file)
         return count
 
     def get_banner_count(self) -> int:
