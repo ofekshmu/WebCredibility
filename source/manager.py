@@ -59,12 +59,12 @@ class Manager:
         length = len(url_lst)
         log(f"Adding new data to result.csv...")
         for idx, url in tqdm(enumerate(url_lst, start=1), total=len(url_lst)):
-            
+
             if url in self.paths.keys():
                 path = self.paths[url]
                 if not self.parser.set_new_page(path):
                     continue
-                
+
                 x = table.iloc[idx - 1]
                 total_words = self.parser.get_word_count()
                 misspelled_words = self.parser.get_mispelling_count()

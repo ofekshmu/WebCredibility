@@ -73,9 +73,9 @@ class HtmlParser:
         return count
 
     def get_banner_count(self) -> int:
-        return self.soup.find_all('img', 
-                                  src=lambda x: x and x.endswith('.jpg'), 
-                                  alt=lambda y: y and 'banner' in y)
+        return len(self.soup.find_all('img',
+                                      src=lambda x: x and x.endswith('.jpg'),
+                                      alt=lambda y: y and 'banner' in y))
 
     def get_link_count(self) -> int:
         """

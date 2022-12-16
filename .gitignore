@@ -9,3 +9,4 @@ data
 *.json
 *.png
 *.txt
+path_config.json
