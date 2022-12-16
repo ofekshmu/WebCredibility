@@ -64,17 +64,22 @@ class Manager:
                 path = self.paths[url]
                 if not self.parser.set_new_page(path):
                     continue
-
+                
                 x = table.iloc[idx - 1]
+                total_words = self.parser.get_word_count()
+                misspelled_words = self.parser.get_mispelling_count()
+                misspelled_percent = misspelled_words*100/total_words
                 values = [idx,
                           x["URL"],
                           x["Result Rank"],
                           self.parser.get_link_count(),
-                          self.parser.get_word_count(),
-                          self.parser.get_mispelling_count(),
-                          "X",
+                          self.parser.get_atag_count(),
+                          total_words,
+                          misspelled_words,
+                          misspelled_percent,
                           self.parser.get_char_count(),
                           self.parser.get_img_count(),
+                          self.parser.get_banner_count(),
                           x["Likert Rating"]]
                 row = dict(zip(Constants.HEADERS, values))
                 self.dataManager.add_row(row)

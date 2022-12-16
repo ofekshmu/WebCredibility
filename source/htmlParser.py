@@ -46,16 +46,6 @@ class HtmlParser:
     def get_img_count(self) -> int:
         return len(self.soup.find_all('img'))
 
-    def is_url_contained_key_word(self) -> int:
-        """
-        TODO: bad functionality
-        """
-        lst = [".org.", ".wiki.", ".gov.", ".ac."]
-        for word in lst:
-            if word in self.path:
-                return True
-        return False
-
     def get_mispelling_count(self) -> int:
         """
         Get the number of misspelled words in the html.
@@ -83,15 +73,20 @@ class HtmlParser:
         return count
 
     def get_banner_count(self) -> int:
-        pass
+        return self.soup.find_all('img', 
+                                  src=lambda x: x and x.endswith('.jpg'), 
+                                  alt=lambda y: y and 'banner' in y)
 
     def get_link_count(self) -> int:
         """
-        Returns the total number of links and a elements in the selected html file.
+        Returns the total number of links in the selected html file.
         """
-        link_count = len(self.soup.find_all('link'))
-        a_count = len(self.soup.find_all('a'))
-        return link_count + a_count
+        return len(self.soup.find_all('link'))
+
+    def get_atag_count(self) -> int:
+        """
+        """
+        return len(self.soup.find_all('a'))
 
     # TODO make sure if this function corresponds with the stats of the provided html
     @staticmethod
