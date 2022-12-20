@@ -93,8 +93,13 @@ class HtmlParser:
 
     def get_banner_count(self) -> int:
         return len(self.soup.find_all('img',
-                                      src=lambda x: x and x.endswith('.jpg'),
+                                      # src=lambda x: x and x.endswith('.jpg'),
                                       alt=lambda y: y and 'banner' in y))
+
+    def is_contains_tld(self, tld: str, url: str) -> int:
+        import re
+        res = re.search(f"https?://.*\.{tld}.*", url)
+        return 1 if res else 0
 
     def get_link_count(self) -> int:
         """

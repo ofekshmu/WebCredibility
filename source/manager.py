@@ -13,7 +13,7 @@ class Manager:
     def __init__(self):
 
         self.parser = HtmlParser()
-        self.dataManager = DataManger(Constants.HEADERS)
+        self.dataManager = DataManger(Constants.HEADERS[:-1] + Constants.TLD + [Constants.HEADERS[-1]])
 
         try:
             json_file = open(Constants.PATH_CONFIG, "r")
@@ -69,6 +69,11 @@ class Manager:
                 total_words = self.parser.get_word_count()
                 misspelled_words = self.parser.get_mispelling_count()
                 misspelled_percent = misspelled_words*100/total_words
+
+                tld_lst = []
+                for tld in Constants.TLD:
+                    tld_lst.append(self.parser.is_contains_tld(tld, x["URL"]))
+
                 values = [idx,
                           x["URL"],
                           x["Result Rank"],
@@ -79,9 +84,13 @@ class Manager:
                           misspelled_percent,
                           self.parser.get_char_count(),
                           self.parser.get_img_count(),
-                          self.parser.get_banner_count(),
-                          x["Likert Rating"]]
-                row = dict(zip(Constants.HEADERS, values))
+                          self.parser.get_banner_count()]
+                
+                values += tld_lst
+                values.append(x["Likert Rating"])
+                
+                headers = Constants.HEADERS[:-1] + Constants.TLD + [Constants.HEADERS[-1]]
+                row = dict(zip(headers, values))
                 self.dataManager.add_row(row)
         self.dataManager.export_table()
 
@@ -101,7 +110,7 @@ class Manager:
 
         with open('output/statistics/statistics.txt', 'w') as f:
 
-            f.write(f'column\t\t\tmean\t\tmedian\t\tstd\t\t\tvar\t\t\tcorrelation\n')
+            f.write(f'column\t\t\tmean\t\tmedian\t\tstd\t\t\tvar\t\t\tmin\t\tmax\t\tcorrelation\n')
 
             if column_names is None:
                 column_names = df.columns
@@ -115,4 +124,4 @@ class Manager:
 
                 likert_corr = SeriesAnalysis.correlation(series, df['Likert Raiting'])
                 stats = SeriesAnalysis.statistics(series)
-                f.write(f'{col}\t\t{stats["mean"]}\t\t{stats["median"]}\t\t{stats["std"]}\t\t{stats["var"]}\t\t{likert_corr}\n')
+                f.write(f'{col}\t\t{stats["mean"]}\t\t{stats["median"]}\t\t{stats["std"]}\t\t{stats["var"]}\t\t{stats["min"]}\t\t{stats["max"]}\t\t{likert_corr}\n')

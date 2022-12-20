@@ -27,6 +27,7 @@ class Constants:
     MEMOIZATION = True
     MEMO_PATH = "Misspelled_data.json"
 
+    TLD = ["com", "org", "net", "edu", "info", "biz", "io", "gov"]
 
 def log(msg: str):
     print(msg)

@@ -96,11 +96,13 @@ class SeriesAnalysis:
         mode = series.mode()
         std = round(series.std(), 2)
         var = round(series.var(), 2)
+        min = series.min()
+        max = series.max()
 
         # Create a pandas.Series object to hold the results
         stats = pd.Series(
-            data=[mean, median, mode, std, var],
-            index=['mean', 'median', 'mode', 'std', 'var'],
+            data=[mean, median, mode, std, var, min, max],
+            index=['mean', 'median', 'mode', 'std', 'var', 'min', 'max'],
         )
 
         # Return the pandas.Series object
