@@ -84,11 +84,13 @@ class Manager:
                           misspelled_percent,
                           self.parser.get_char_count(),
                           self.parser.get_img_count(),
-                          self.parser.get_banner_count()]
-                
+                          self.parser.get_banner_count(),
+                          self.parser.get_url_depth(x["URL"]),
+                          self.parser.count_special_char_in_url(x["URL"])]
+
                 values += tld_lst
                 values.append(x["Likert Rating"])
-                
+
                 headers = Constants.HEADERS[:-1] + Constants.TLD + [Constants.HEADERS[-1]]
                 row = dict(zip(headers, values))
                 self.dataManager.add_row(row)

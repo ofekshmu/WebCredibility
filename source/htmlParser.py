@@ -92,6 +92,33 @@ class HtmlParser:
         return count
 
     def get_banner_count(self) -> int:
+
+        ad_count = 0
+
+        ad_classes = ['ad', 'banner', 'ad-banner', 'advert']
+        for ad_class in ad_classes:
+            ad_count += len(self.soup.find_all(class_=ad_class))
+
+        # Search for elements with common advertisement IDs
+        ad_ids = ['ad']
+        for ad_id in ad_ids:
+            ad_count += len(self.soup.find_all(id=ad_id))
+
+        # Search for elements with common advertisement data attributes
+        ad_attributes = ['data-ad']
+        for ad_attribute in ad_attributes:
+            ad_count += len(self.soup.find_all(attrs={ad_attribute: 'true'}))
+
+        # Search for iframe elements
+        ad_count += len(self.soup.find_all('iframe'))
+
+        # Return the total number of advertisements found
+        return ad_count
+
+
+
+
+        
         return len(self.soup.find_all('img',
                                       # src=lambda x: x and x.endswith('.jpg'),
                                       alt=lambda y: y and 'banner' in y))
@@ -106,6 +133,30 @@ class HtmlParser:
         Returns the total number of links in the selected html file.
         """
         return len(self.soup.find_all('link'))
+
+    def get_url_depth(self, url: str) -> int:
+        length = len(url)
+        count = 0
+        index = 7  # This is the first character after the "https:\\"
+        while True:
+            index = url.find("/", index)
+            if index == -1 or (index + 1 == length):
+                break
+            count += 1
+            index += 1
+        return count
+
+    def count_special_char_in_url(self, url: str) -> int:
+        special_characters = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')',
+                              '-', '_', '+', '=', '{', '}', '[', ']', '|',
+                              '\\', ':', ';', '"', '\'', '<', '>', ',', '.', '?']
+                              # excluding ., \, /
+
+        count = 0
+        for char in special_characters:
+            count += url.count(char)
+
+        return count
 
     def get_atag_count(self) -> int:
         """

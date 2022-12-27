@@ -15,6 +15,8 @@ class Constants:
                "Char count",
                "Img count",
                "Banner count",
+               "Link depth",
+               "Special characters",
                "Likert Raiting"]
     CACHED_DATA_PATH = "data/Cached Pages"
     CREATED_DATA_PATH = "data/Created HTML"
