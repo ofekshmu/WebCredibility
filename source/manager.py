@@ -13,7 +13,7 @@ class Manager:
     def __init__(self):
 
         self.parser = HtmlParser()
-        self.dataManager = DataManger(Constants.HEADERS[:-1] + Constants.TLD + [Constants.HEADERS[-1]])
+        self.dataManager = DataManger()
 
         try:
             json_file = open(Constants.PATH_CONFIG, "r")
@@ -49,15 +49,15 @@ class Manager:
         with open(Constants.PATH_CONFIG, "w") as outfile:
             json.dump(dict, outfile)
 
-    def parse_and_export(self) -> None:
+    def parse_and_export(self, expert_raiting: bool = False) -> None:
         """
         The function will iterate over all existing html, parse and create an xlsx
         file containing the results gathered.
         """
-        table = DataManger.read_table()
+        table = DataManger.read_table(expert_raiting=expert_raiting)
         url_lst = table["URL"]
-        length = len(url_lst)
-        log(f"Adding new data to result.csv...")
+        error_counter = 0
+        log(f"Adding new data to Excel file...")
         for idx, url in tqdm(enumerate(url_lst, start=1), total=len(url_lst)):
 
             if url in self.paths.keys():
@@ -74,29 +74,47 @@ class Manager:
                 for tld in Constants.TLD:
                     tld_lst.append(self.parser.is_contains_tld(tld, x["URL"]))
 
-                values = [idx,
-                          x["URL"],
-                          x["Result Rank"],
-                          self.parser.get_link_count(),
-                          self.parser.get_atag_count(),
-                          total_words,
-                          misspelled_words,
-                          misspelled_percent,
-                          self.parser.get_char_count(),
-                          self.parser.get_img_count(),
-                          self.parser.get_banner_count(),
-                          self.parser.get_url_depth(x["URL"]),
-                          self.parser.count_special_char_in_url(x["URL"])]
+                if expert_raiting:
+                    values = [idx,
+                            x["URL"],
+                            self.parser.get_link_count(),
+                            self.parser.get_atag_count(),
+                            total_words,
+                            misspelled_words,
+                            misspelled_percent,
+                            self.parser.get_char_count(),
+                            self.parser.get_img_count(),
+                            self.parser.get_banner_count(),
+                            self.parser.get_url_depth(x["URL"]),
+                            self.parser.count_special_char_in_url(x["URL"])]
+                else:
+                    values = [idx,
+                            x["URL"],
+                            x["Result Rank"],
+                            self.parser.get_link_count(),
+                            self.parser.get_atag_count(),
+                            total_words,
+                            misspelled_words,
+                            misspelled_percent,
+                            self.parser.get_char_count(),
+                            self.parser.get_img_count(),
+                            self.parser.get_banner_count(),
+                            self.parser.get_url_depth(x["URL"]),
+                            self.parser.count_special_char_in_url(x["URL"])]
 
                 values += tld_lst
                 values.append(x["Likert Rating"])
+                if expert_raiting:
+                    values.append(x["Rater ID"])
 
-                headers = Constants.HEADERS[:-1] + Constants.TLD + [Constants.HEADERS[-1]]
-                row = dict(zip(headers, values))
-                self.dataManager.add_row(row)
-        self.dataManager.export_table()
+                self.dataManager.add_row(values, expert_raiting=expert_raiting)
+            else:
+                error_counter += 1
+        log(f"{error_counter} url's were not found in the json file.")
+        log(f"Exporting table...")
+        self.dataManager.export_table(expert_raiting=expert_raiting)
 
-    def read_excel_and_analyze(self, column_names: list = None) -> None:
+    def read_excel_and_analyze(self, column_names: list = None, expert_raiting: bool = False) -> None:
         """
         Read a table from an Excel file, iterate through its columns, and call the methods from the
         SeriesAnalysis class on each column.
@@ -107,10 +125,18 @@ class Manager:
         Returns:
         None
         """
-        print("Calculating statistics...")
-        df = pd.read_excel(f"output/{Constants.OUTPUT_FILE_NAME}.xlsx")
+        if expert_raiting:
+            tag = "expert_"
+        else:
+            tag = ""
 
-        with open('output/statistics/statistics.txt', 'w') as f:
+        print("Calculating statistics...")
+        if expert_raiting:
+            df = pd.read_excel(f"output/{Constants.OUTPUT_EXPERT_NAME}.xlsx")
+        else:
+            df = pd.read_excel(f"output/{Constants.OUTPUT_FILE_NAME}.xlsx")
+
+        with open(f'output/statistics/{tag}statistics.txt', 'w') as f:
 
             f.write(f'column\t\t\tmean\t\tmedian\t\tstd\t\t\tvar\t\t\tmin\t\tmax\t\tcorrelation\n')
 

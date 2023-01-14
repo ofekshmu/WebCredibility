@@ -10,3 +10,6 @@ data
 *.png
 *.txt
 path_config.json
+*.jpeg
+path_config.json
+*.zip
