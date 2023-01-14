@@ -33,6 +33,19 @@ class Constants:
 
     TLD = ["com", "org", "net", "edu", "info", "biz", "io", "gov"]
 
+    # Features for analisys
+    FEATURES_FOR_ANALISYS_DEFAULT = ["Result Rank",
+                                     "Links",
+                                     "a tags",
+                                     "Word count",
+                                     "Misspelled words",
+                                     "Img count"]
+    FEATURES_FOR_ANALISYS_EXPERTS = ["Links",
+                                     "a tags",
+                                     "Word count",
+                                     "Misspelled words",
+                                     "Img count"]                               
+
 def log(msg: str):
     print(msg)
     f = open("log.txt", 'a')

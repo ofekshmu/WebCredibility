@@ -76,31 +76,31 @@ class Manager:
 
                 if expert_raiting:
                     values = [idx,
-                            x["URL"],
-                            self.parser.get_link_count(),
-                            self.parser.get_atag_count(),
-                            total_words,
-                            misspelled_words,
-                            misspelled_percent,
-                            self.parser.get_char_count(),
-                            self.parser.get_img_count(),
-                            self.parser.get_banner_count(),
-                            self.parser.get_url_depth(x["URL"]),
-                            self.parser.count_special_char_in_url(x["URL"])]
+                              x["URL"],
+                              self.parser.get_link_count(),
+                              self.parser.get_atag_count(),
+                              total_words,
+                              misspelled_words,
+                              misspelled_percent,
+                              self.parser.get_char_count(),
+                              self.parser.get_img_count(),
+                              self.parser.get_banner_count(),
+                              self.parser.get_url_depth(x["URL"]),
+                              self.parser.count_special_char_in_url(x["URL"])]
                 else:
                     values = [idx,
-                            x["URL"],
-                            x["Result Rank"],
-                            self.parser.get_link_count(),
-                            self.parser.get_atag_count(),
-                            total_words,
-                            misspelled_words,
-                            misspelled_percent,
-                            self.parser.get_char_count(),
-                            self.parser.get_img_count(),
-                            self.parser.get_banner_count(),
-                            self.parser.get_url_depth(x["URL"]),
-                            self.parser.count_special_char_in_url(x["URL"])]
+                              x["URL"],
+                              x["Result Rank"],
+                              self.parser.get_link_count(),
+                              self.parser.get_atag_count(),
+                              total_words,
+                              misspelled_words,
+                              misspelled_percent,
+                              self.parser.get_char_count(),
+                              self.parser.get_img_count(),
+                              self.parser.get_banner_count(),
+                              self.parser.get_url_depth(x["URL"]),
+                              self.parser.count_special_char_in_url(x["URL"])]
 
                 values += tld_lst
                 values.append(x["Likert Rating"])
@@ -146,9 +146,9 @@ class Manager:
             for col in tqdm(column_names):
                 series = df[col]
 
-                SeriesAnalysis.histogram(series, col)
+                SeriesAnalysis.histogram(series, col, tag)
                 # SeriesAnalysis.line_plot(series, col)
-                SeriesAnalysis.scatter_plot(df['Likert Raiting'], series, col)
+                SeriesAnalysis.scatter_plot(df['Likert Raiting'], series, col, tag)
 
                 likert_corr = SeriesAnalysis.correlation(series, df['Likert Raiting'])
                 stats = SeriesAnalysis.statistics(series)
