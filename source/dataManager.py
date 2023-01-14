@@ -11,26 +11,37 @@ class DataManger:
         """
         self.headers = headers
         self.table = pd.DataFrame(columns=headers)
-        #self.original_table = pd.read_excel(Constants.DATA_PATH)
+        self.expert_raiting_table = pd.DataFrame(columns=headers + ["Rater Id"])
 
-    def add_row(self, row) -> None:
+    def add_row(self, row, expert_raiting: bool) -> None:
         """
         Add a single row into the active table
         """
-        self.table = pd.concat([self.table, pd.Series(row).to_frame().T], ignore_index=True)
+        if expert_raiting:
+            self.table = pd.concat([self.expert_raiting_table,
+                                   pd.Series(row).to_frame().T],
+                                   ignore_index=True)
+        else:
+            self.table = pd.concat([self.table,
+                                   pd.Series(row).to_frame().T],
+                                   ignore_index=True)
 
-    def export_table(self) -> None:
+    def export_table(self, expert_raiting: bool) -> None:
         """
         Export the data frame located in self.table as an excel file to
         the output directory.
         """
-        print(self.table)
-        self.table.to_excel(f"output/{Constants.OUTPUT_FILE_NAME}.xlsx", index=False)
-    
+        if expert_raiting:
+            self.table.to_excel(f"output/{Constants.OUTPUT_FILE_NAME}.xlsx", index=False)
+        else:
+            self.table.to_excel(f"output/{Constants.OUTPUT_EXPERT_NAMER}.xlsx", index=False)
+
     @staticmethod
-    def read_table() -> List:
+    def read_table(expert_raiting: bool) -> List:
         """
         A function that returns the original excel table
         """
-        return pd.read_excel(Constants.DATA_PATH)
-
+        if expert_raiting:
+            return pd.read_excel(Constants.EXPERT_RAITING_PATH)
+        else:
+            return pd.read_excel(Constants.DATA_PATH)

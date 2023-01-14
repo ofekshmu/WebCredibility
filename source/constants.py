@@ -2,8 +2,10 @@
 class Constants:
     # Path to Excel holding url basic info and prediction
     DATA_PATH = "data/web_credibility_1000_url_ratings.xls"
+    EXPERT_RAITING_PATH = "data/web_credibility_expert_ratings_for_test_set.xlsx"
     # Name of the output file (path and ending specified in code)
     OUTPUT_FILE_NAME = "result"
+    OUTPUT_EXPERT_NAMER = "secondary"
     # Headers for final, exported excel chart
     HEADERS = ["Original row ID",
                "URL",

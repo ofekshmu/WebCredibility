@@ -66,7 +66,6 @@ class HtmlParser:
         if self.path in self.memo:
             return self.memo[self.path]
 
-
         from textblob import Word
 
         def check_spelling(word):
@@ -114,14 +113,6 @@ class HtmlParser:
 
         # Return the total number of advertisements found
         return ad_count
-
-
-
-
-        
-        return len(self.soup.find_all('img',
-                                      # src=lambda x: x and x.endswith('.jpg'),
-                                      alt=lambda y: y and 'banner' in y))
 
     def is_contains_tld(self, tld: str, url: str) -> int:
         import re
